@@ -1,0 +1,16 @@
+name: remove merge label
+on:
+  pull_request:
+    types:
+      - synchronize
+jobs:
+  remove_label:
+    runs-on: ubuntu-latest
+    name: remove label
+    steps:
+      - name: removelabel
+        uses: buildsville/add-remove-label@v1
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          label: merge
+          type: remove

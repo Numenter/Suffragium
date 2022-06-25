@@ -30,18 +30,18 @@ def main():
 	if sys.version_info < (3, 7):
 		err = "Please upgrade your Python version to 3.7.0 or higher"
 	else:
-		game_path = os.path.normpath("../game/")
+		game_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "game")
 		try:
 			parameters = ["gdformat", game_path]
 			if config.get("diff"):
 				parameters.append("-d")
 			resp = subprocess.run(parameters, capture_output=True, check=False)
 			print("--- Format ---")
-			print(resp.stdout.decode("utf-8").strip())
+			print((resp.stdout or resp.stderr or b"").decode("utf-8").strip())
 			print()
 			resp2 = subprocess.run(["gdlint", game_path], capture_output=True, check=False)
 			print("--- Lint ---")
-			print(resp2.stdout.decode("utf-8").strip())
+			print((resp2.stdout or resp2.stderr or b"").decode("utf-8").strip())
 
 			err = resp.returncode or resp2.returncode
 		except OSError:

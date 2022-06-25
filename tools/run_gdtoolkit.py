@@ -25,8 +25,8 @@ def main():
     args = parser.parse_args()
     config = vars(args)
 
-    if sys.version_info < (3, 4):
-        return "Please upgrade your Python version to 3.5.0 or higher"
+    if sys.version_info < (3, 7):
+        return "Please upgrade your Python version to 3.7.0 or higher"
     game_path = "../game/"
     try:
         parameters = ["gdformat", game_path]

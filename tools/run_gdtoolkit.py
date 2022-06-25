@@ -46,9 +46,9 @@ def main():
 			err = resp.returncode or resp2.returncode
 		except OSError:
 			err = "ERROR: GDScript Toolkit not installed!"
-	if err != 0:
-		print(err)
 	if sys.platform == "win32" and not config.get("skip"):
+		if err != 0:
+			print(err)
 		print()
 		input("Press Enter to close.")
 	return err

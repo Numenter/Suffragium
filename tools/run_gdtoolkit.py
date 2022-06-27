@@ -3,12 +3,14 @@
 https://github.com/Scony/godot-gdscript-toolkit
 """
 import sys
-import os
 import argparse
 import subprocess
 
+from os.path import abspath, dirname, join
+from typing import Union
 
-def main():
+
+def main() -> Union[int, str, None]:
     """Execute gdformat and gdlint and return whether there was an error."""
     parser = argparse.ArgumentParser(
         description="This Script runs gdformat and gdlint on all files in game folder",
@@ -26,34 +28,38 @@ def main():
     args = parser.parse_args()
     config = vars(args)
 
-    err = 0
+    err: Union[int, str, None]
     if sys.version_info < (3, 7):
         err = "Please upgrade your Python version to 3.7.0 or higher"
     else:
-        game_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "game")
+        game_path = join(dirname(dirname(abspath(__file__))), "game")
+
         try:
+            print("--- Format ---")
             parameters = ["gdformat", game_path]
             if config.get("diff"):
                 parameters.append("-d")
-            resp = subprocess.run(parameters, capture_output=True, check=False)
-            print("--- Format ---")
-            print((resp.stdout or resp.stderr or b"").decode("utf-8").strip())
-            print()
-            resp2 = subprocess.run(
-                ["gdlint", game_path], capture_output=True, check=False
-            )
-            print("--- Lint ---")
-            print((resp2.stdout or resp2.stderr or b"").decode("utf-8").strip())
+            err = run_command(parameters)
 
-            err = resp.returncode or resp2.returncode
+            print("\n--- Lint ---")
+            err = err or run_command(["gdlint", game_path])
         except OSError:
             err = "ERROR: GDScript Toolkit not installed!"
-    if sys.platform == "win32" and not config.get("skip"):
-        if err != 0:
-            print(err)
-        print()
-        input("Press Enter to close.")
-    return err
+
+    if sys.platform != "win32" or config.get("skip"):
+        return err
+
+    if err and isinstance(err, str):
+        print(err)
+
+    input("\nPress Enter to close.")
+    return 1 if err else 0
+
+
+def run_command(args: list[str]) -> int:
+    """Run a given command with the given arguments."""
+    result = subprocess.run(args, stderr=sys.stderr, stdout=sys.stdout, check=False)
+    return result.returncode
 
 
 if __name__ == "__main__":

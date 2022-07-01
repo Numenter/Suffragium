@@ -18,7 +18,7 @@ body {
 }
 
 h1 {
-    margin-bottom: 1vmin;
+    margin-bottom: 3vmin;
 }
 
 h3 {
@@ -83,4 +83,34 @@ span {
     .legend {
         display: none;
     }
+}
+
+#dialog {
+    margin: 2vmin;
+    top: 1vmin;
+    bottom: 1vmin;
+    left: 1vmin;
+    right: 1vmin;
+    background-color: rgb(128, 192, 255);
+}
+
+.center {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.center a {
+    color: #58a6ff;
+}
+
+.hide {
+    display: none;
+}
+
+button {
+    border-radius: 1vmin;
+    padding: 1vmin;
+    margin-right: 4vmin;
+    background-color: #30363d;
+    border-color: #30363d;
 }

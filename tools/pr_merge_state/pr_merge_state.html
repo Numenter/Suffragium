@@ -9,11 +9,24 @@
 
 <body onload="init()">
 	<h1>Suffragium pull requst overview</h1>
-	<divc class="legend">
+	<div class="legend">
+		<button type="button" onclick="refresh()">Refresh</button>
 		<span class="pr_outer_box">Active</span>
 		<span class="pr_outer_box status_merge">Merge</span>
 		<span class="pr_outer_box status_delete">Close</span>
 	</div>
+	<div id="token_dialog" class="center">
+		<h2>Limited requests.</h2>
+		<p>This app uses multiple requests form the github rest api. However there is a request limit.</p>
+		<p>60/h for anonome and 5000/h for authenticated.</p>
+		<a href="https://github.com/settings/tokens">Generrate your Personal access token!</a>
+		<p>
+			<input name="searchTxt" type="text" maxlength="512" id="token_input" />
+			<button type="button" onclick="token_action()">Token</button>
+			<button type="button" onclick="refresh()">without Token</button>
+		</p>
+	</div>
+	<div id="entrys"></div>
 </body>
 
 </html>

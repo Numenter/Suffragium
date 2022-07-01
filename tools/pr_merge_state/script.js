@@ -1,24 +1,45 @@
-let body
+let entrys
 let pulls = [];
 let requests_open = 0;
 let assembled_info = [];
 
+let token = ""
+
 function init() {
-	body = document.body
-	fetch_api('https://api.github.com/repos/letsgamedev/Suffragium/pulls', callback_api_pulls);
+	entrys = document.getElementById("entrys")
 }
 
 function fetch_api(url, callback, params) {
-	let request = new XMLHttpRequest();
-	request.onload = callback;
-	request.params = params;
-	request.open('get', url, true);
-	request.send();
+	let res
+	let headers = {}
+	if (token != "") {
+		headers = { Authorization: "token " + token }
+	}
+	fetch(url, {
+		method: "GET",
+		headers: headers
+	})
+		.then(response => {
+			res = response
+			if (response.ok) {
+				return response.json()
+			} else
+				console.log("NOT SUCCESFUL")
+		})
+		.then(data => {
+			callback(data, params, res)
+		});
 	requests_open += 1;
 }
 
-function callback_api_pulls() {
-	pulls = JSON.parse(this.responseText);
+function callback_api_pulls(data, params, res) {
+	pulls = data
+	console.log(res.headers.get('x-ratelimit-remaining'));
+
+	if (res.headers.get('x-ratelimit-remaining') < pulls.length * 2) {
+		open_auth_token_dialog()
+		return
+	}
 	for (i = 0; i < pulls.length; i++) {
 		let pull = pulls[i];
 		fetch_api(pull.issue_url, callback_api_pull_issue, { index: i });
@@ -27,16 +48,16 @@ function callback_api_pulls() {
 	callback_finished();
 }
 
-function callback_api_pull_issue() {
-	let pull_issue = JSON.parse(this.responseText);
-	let index = this.params.index;
+function callback_api_pull_issue(data, params, res) {
+	let pull_issue = data;
+	let index = params.index;
 	pulls[index].issue_data = pull_issue;
 	callback_finished();
 }
 
-function callback_api_pull_commits() {
-	let pull_commits = JSON.parse(this.responseText);
-	let index = this.params.index;
+function callback_api_pull_commits(data, params, res) {
+	let pull_commits = data;
+	let index = params.index;
 	pulls[index].commits_data = pull_commits;
 	callback_finished();
 }
@@ -108,14 +129,16 @@ function display() {
 		if (!isNaN(percentage)) {
 			html_vote_percent = ' (' + percentage + '%) '
 		}
+		let html_status = get_status(pull.draft, votes_up, votes_down, last_commit_days)
 
-		let html_begin = '<a href=' + pull.url + '><div class="pr_outer_box' + get_status(votes_up, votes_down, last_commit_days) + '"><div class="pr_box' + html_draft_class + '">';
+
+		let html_begin = '<a href=' + pull.url + '><div class="pr_outer_box' + html_status + '"><div class="pr_box' + html_draft_class + '">';
 		let html_title = '<h3>' + html_draft_title + pull.title + '</h3>';
 		let html_votes = '<span>👍 ' + pull.votes['+1'] + ' 👎 ' + pull.votes['-1'] + html_vote_percent + '</span>';
 		let html_last_commit = '<span>last commit: ' + last_commit_days + ' days ago</span>';
 		let html_end = '</div></div></a>';
 		let html = html_begin + html_title + html_votes + html_last_commit + html_end;
-		body.innerHTML += html;
+		entrys.innerHTML += html;
 	}
 }
 
@@ -127,17 +150,42 @@ function calculate_days(time_ms) {
 	return days;
 }
 
-function get_status(votes_up, votes_down, last_commit_days) {
+function get_status(draft, votes_up, votes_down, last_commit_days) {
 	let vote_count = votes_up + votes_down;
 	let positive_votes = votes_up / vote_count;
-	if (last_commit_days >= 1 && vote_count > 10 && positive_votes >= 0.75) {
-		return " status_merge";
+	if (!draft) {
+		if (last_commit_days >= 1 && vote_count > 10 && positive_votes >= 0.75) {
+			return " status_merge";
+		}
+		if (last_commit_days >= 3 && positive_votes >= 0.75) {
+			return " status_merge";
+		}
 	}
-	if (last_commit_days >= 3 && positive_votes >= 0.75) {
-		return " status_merge";
-	}
+
 	if (last_commit_days > 30) {
 		return " status_delete";
 	}
 	return "";
+}
+
+function open_auth_token_dialog() {
+	let dialog = document.getElementById("token_dialog")
+	dialog.classList.remove("hide");
+}
+
+function token_action() {
+	token_input = document.getElementById("token_input")
+	if (token_input != "") {
+		token = token_input.value
+		token_input.value = ""
+	}
+	refresh()
+}
+
+function refresh() {
+	entrys.innerHTML = ""
+	let dialog = document.getElementById("token_dialog")
+	dialog.classList.add("hide");
+	requests_open = 0
+	fetch_api('https://api.github.com/repos/letsgamedev/Suffragium/pulls', callback_api_pulls);
 }

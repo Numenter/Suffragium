@@ -130,7 +130,7 @@ function calculate_days(time_ms) {
 function get_status(votes_up, votes_down, last_commit_days) {
 	let vote_count = votes_up + votes_down;
 	let positive_votes = votes_up / vote_count;
-	if (last_commit_days >= 1 && vote_count >= 10 && positive_votes >= 0.75) {
+	if (last_commit_days >= 1 && vote_count > 10 && positive_votes >= 0.75) {
 		return " status_merge";
 	}
 	if (last_commit_days >= 3 && positive_votes >= 0.75) {

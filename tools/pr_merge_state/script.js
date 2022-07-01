@@ -1,5 +1,4 @@
 let body
-
 let pulls = [];
 let requests_open = 0;
 let assembled_info = [];
@@ -123,4 +122,3 @@ function get_status(votes_up, votes_down, last_commit_days){
 		return '<p class="status status_delete">DELETE</p>';
 	}
 	return '<p class="status status_active">active</p>';
-}

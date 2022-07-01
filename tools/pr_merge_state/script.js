@@ -98,13 +98,20 @@ function display() {
 		let vote_count = votes_up + votes_down;
 		percentage = Math.round(votes_up / vote_count * 1000) / 10;
 		// Build
-		let html_begin = '<a href=' + pull.url + '><div class="pr_outer_box' + get_status(votes_up, votes_down, last_commit_days) + '"><div class="pr_box">';
-		let html_title = '<h3>' + pull.title + '</h3>';
+		let html_draft_class = ""
+		let html_draft_title = ""
 		if (pull.draft) {
-			html_begin = '<a href=' + pull.url + '><div class="pr_outer_box' + get_status(votes_up, votes_down, last_commit_days) + '"><div class="pr_box pr_draft">';
-			html_title = '<h3>Draft: ' + pull.title + '</h3>';
+			html_draft_class = " pr_draft"
+			html_draft_title = "Draft: "
 		}
-		let html_votes = '<span>👍 ' + pull.votes['+1'] + ' 👎 ' + pull.votes['-1'] + ' (' + percentage + '%) </span>';
+		let html_vote_percent = ""
+		if (!isNaN(percentage)) {
+			html_vote_percent = ' (' + percentage + '%) '
+		}
+
+		let html_begin = '<a href=' + pull.url + '><div class="pr_outer_box' + get_status(votes_up, votes_down, last_commit_days) + '"><div class="pr_box' + html_draft_class + '">';
+		let html_title = '<h3>' + html_draft_title + pull.title + '</h3>';
+		let html_votes = '<span>👍 ' + pull.votes['+1'] + ' 👎 ' + pull.votes['-1'] + html_vote_percent + '</span>';
 		let html_last_commit = '<span>last commit: ' + last_commit_days + ' days ago</span>';
 		let html_end = '</div></div></a>';
 		let html = html_begin + html_title + html_votes + html_last_commit + html_end;
@@ -123,7 +130,7 @@ function calculate_days(time_ms) {
 function get_status(votes_up, votes_down, last_commit_days) {
 	let vote_count = votes_up + votes_down;
 	let positive_votes = votes_up / vote_count;
-	if (last_commit_days >= 1 && vote_count > 10 && positive_votes >= 0.75) {
+	if (last_commit_days >= 1 && vote_count >= 10 && positive_votes >= 0.75) {
 		return " status_merge";
 	}
 	if (last_commit_days >= 3 && positive_votes >= 0.75) {

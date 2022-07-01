@@ -3,7 +3,6 @@
     padding: 0px;
     color: #c9d1d9;
     text-decoration: none;
-
 }
 
 @font-face {
@@ -16,6 +15,10 @@ body {
     margin: 2vmin;
     box-sizing: border-box;
     background-color: #0d1117;
+}
+
+h1 {
+    margin-bottom: 1vmin;
 }
 
 h3 {
@@ -37,7 +40,6 @@ span {
 .pr_outer_box {
     padding-left: 1vmin;
     margin-top: 1vmin;
-    /* background: #2f6ece; */
     background: #1b3f75;
     border-radius: 1vmin;
     border-top-right-radius: 2vmin;
@@ -49,24 +51,36 @@ span {
     color: #999fa5;
 }
 
-.status_div {
-    text-align: right;
-}
-
-.status {
-    display: inline;
-    padding: 1vmin;
-    border-radius: 1vmin;
-}
-
 .status_active {
     background-color: rgb(128, 192, 255);
 }
 
 .status_merge {
-    background-color: rgb(180, 180, 0);
+    background-color: rgb(134, 134, 0);
 }
 
 .status_delete {
-    background-color: rgb(185, 71, 71);
+    background-color: rgb(150, 57, 57);
+}
+
+.legend {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    border-radius: 1vmin;
+    padding: 1vmin;
+    margin-right: 2vmin;
+    margin-top: 2vmin;
+}
+
+.legend span {
+    border-radius: 1vmin;
+    padding: 1vmin;
+    margin-right: 1vmin;
+}
+
+@media only screen and (max-width: 725px) {
+    .legend {
+        display: none;
+    }
 }

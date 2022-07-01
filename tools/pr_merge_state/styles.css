@@ -1,7 +1,72 @@
-.merge {
-    background-color: green;
+* {
+    margin: 0px;
+    padding: 0px;
+    color: #c9d1d9;
+    text-decoration: none;
+
 }
 
-.close {
-    background-color: red;
+@font-face {
+    font-family: 'Roboto';
+    src: url('../../game/shared/fonts/roboto/roboto_regular.ttf');
+}
+
+body {
+    font-family: 'Roboto';
+    margin: 2vmin;
+    box-sizing: border-box;
+    background-color: #0d1117;
+}
+
+h3 {
+    margin-bottom: 1vmin;
+}
+
+span {
+    margin-right: 3vmin;
+}
+
+.pr_box {
+    padding-left: 2vmin;
+    padding-top: 1vmin;
+    padding-bottom: 1vmin;
+    background: #131922;
+    border-radius: 1vmin;
+}
+
+.pr_outer_box {
+    padding-left: 1vmin;
+    margin-top: 1vmin;
+    /* background: #2f6ece; */
+    background: #1b3f75;
+    border-radius: 1vmin;
+    border-top-right-radius: 2vmin;
+    border-bottom-right-radius: 2vmin;
+}
+
+.pr_draft {
+    background: #161920;
+    color: #999fa5;
+}
+
+.status_div {
+    text-align: right;
+}
+
+.status {
+    display: inline;
+    padding: 1vmin;
+    border-radius: 1vmin;
+}
+
+.status_active {
+    background-color: rgb(128, 192, 255);
+}
+
+.status_merge {
+    background-color: rgb(180, 180, 0);
+}
+
+.status_delete {
+    background-color: rgb(185, 71, 71);
 }

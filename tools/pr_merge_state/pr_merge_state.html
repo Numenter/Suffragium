@@ -1,11 +1,48 @@
 <!DOCTYPE html>
-
-<head>
+<html>
+	<head>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
-</head>
+		<script src="script.js"></script>
+		<style>
+@font-face {
+	font-family: 'Roboto';
+	src: url('../../game/shared/fonts/roboto/roboto_regular.ttf');
+}
+body{
+	font-family: 'Roboto';
+	margin: 2vmin;
+	box-sizing:border-box;
+}
 
-<body>
-    <table id="list">
-    </table>
-</body>
+.pr_box{
+	padding: 2vmin;
+	background: rgb(230, 230, 230);
+	border-radius: 1vmin;
+}
+
+.status_div{
+	text-align: right;
+}
+
+.status{
+	display:inline;
+	padding: 1vmin;
+	border-radius: 1vmin;
+}
+
+.status_active{
+	background-color: rgb(128, 192, 255);
+}
+
+.status_merge{
+	background-color: rgb(255, 255, 0);
+}
+
+.status_delete{
+	background-color: rgb(255, 96, 96);
+}
+		</style>
+	</head>
+	<body onload="init()">
+	</body>
+</html>

@@ -16,15 +16,18 @@
 		<span class="pr_outer_box status_delete">Close</span>
 	</div>
 	<div id="token_dialog" class="center">
-		<h2>Limited requests.</h2>
-		<p>This app uses multiple requests form the github rest api. However there is a request limit.</p>
-		<p>60/h for anonome and 5000/h for authenticated.</p>
-		<a href="https://github.com/settings/tokens">Generrate your Personal access token!</a>
-		<p>
-			<input name="searchTxt" type="text" maxlength="512" id="token_input" />
-			<button type="button" onclick="token_action()">Token</button>
-			<button type="button" onclick="refresh()">without Token</button>
-		</p>
+		<h2>Authentication required</h2>
+		<p>The remaining request limit is not sufficient to fetch the required data.</p>
+		<p>Please authenticate with a Github personal access token.</p>
+		<span>
+			<a href="https://github.com/settings/tokens" target="_blank">Generate a personal access token!</a>
+			(No scope needs to be selected)
+		</span>
+		<div>
+			<input type="password" maxlength="512" id="input_auth_token" placeholder="ghp_0000X0000X0000X0000X0000X0000X0000X0"/>
+			<button type="button" onclick="token_authentication()">Authenticate</button>
+			<button type="button" onclick="refresh()">Continue without Token</button>
+		</div>
 	</div>
 	<div id="entrys"></div>
 </body>

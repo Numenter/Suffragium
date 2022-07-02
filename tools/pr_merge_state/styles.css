@@ -113,4 +113,5 @@ button {
     margin-right: 4vmin;
     background-color: #30363d;
     border-color: #30363d;
+    cursor: pointer;
 }

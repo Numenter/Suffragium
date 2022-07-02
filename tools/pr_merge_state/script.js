@@ -165,7 +165,7 @@ function display_pull(pull) {
 		html_vote_percent = ' (' + percentage + '%) ';
 	}
 
-	let html_a_open = '<a hef="' + pull.url + '" target="_blank">';
+	let html_a_open = '<a href="' + pull.url + '" target="_blank">';
 	let html_outer_open = '<div class="pr_outer_box' + status_class + '">';
 	let html_inner_open = '<div class="pr_box' + html_draft_class + '">';
 	let html_title = '<h3>' + html_draft_title + pull.title + '</h3>';

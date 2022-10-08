@@ -2,7 +2,7 @@ extends Node
 
 var current_map = null
 var map_count := 0
-var map_boundary: Dictionary
+var map_boundary: Rect2
 var _maps: Array = []
 
 onready var _main = get_tree().current_scene
@@ -66,38 +66,30 @@ func _load_map(name_name: String) -> bool:
 
 
 func out_of_bound(object) -> bool:
-	var boundary: Dictionary = map_boundary
+	var boundary: Rect2 = map_boundary
 	if (
-		object.position.x < boundary.x_min
-		or object.position.x > boundary.x_max
-		or object.position.y < boundary.y_min
-		or object.position.y > boundary.y_max
+		object.position.x < boundary.position.x
+		or object.position.x > boundary.end.x
+		or object.position.y < boundary.position.y
+		or object.position.y > boundary.end.y
 	):
 		return true
 	return false
 
 
-func _calculate_map_boundary(map) -> Dictionary:
-	var boundary: Dictionary = {}
-	boundary["x_min"] = 0.0
-	boundary["x_max"] = 0.0
-	boundary["y_min"] = 0.0
-	boundary["y_max"] = 0.0
+func _calculate_map_boundary(map) -> Rect2:
+	var boundary: Rect2 = Rect2(Vector2.ZERO, Vector2.ZERO)
 	for child in map.get_children():
-		var child_position: Vector2
-		if child is Node2D:
-			child_position = child.position
-		if child is Label:
-			child_position = child.rect_position
-		if child_position == null:
-			continue
-		boundary["x_min"] = min(boundary["x_min"], child_position.x)
-		boundary["x_max"] = max(boundary["x_max"], child_position.x)
-		boundary["y_min"] = min(boundary["y_min"], child_position.y)
-		boundary["y_max"] = max(boundary["y_max"], child_position.y)
-	var boundary_margin: int = 100
-	boundary["x_min"] = boundary["x_min"] - boundary_margin
-	boundary["x_max"] = boundary["x_max"] + boundary_margin
-	boundary["y_min"] = boundary["y_min"] - boundary_margin
-	boundary["y_max"] = boundary["y_max"] + boundary_margin
+		match child.get_class():
+			"Label":
+				boundary = boundary.expand(child.rect_position)
+			"TileMap":
+				var tilemap_boundary: Rect2 = child.get_used_rect()
+				boundary = boundary.expand(tilemap_boundary.position * 8)
+				boundary = boundary.expand(tilemap_boundary.end * 8)
+			"Node2D":
+				boundary = boundary.expand(child.position)
+
+	var boundary_margin: float = 16.0 * 8.0
+	boundary = boundary.grow(boundary_margin)
 	return boundary
